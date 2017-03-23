@@ -57,6 +57,8 @@ for root_u, dirs, files in os.walk(search_dir):
                 for k, jpg in enumerate(sliced):
                     flow[:,:,k*2] = cv2.imread(join(root_u, jpg), cv2.IMREAD_GRAYSCALE)
                     flow[:,:,k*2+1] = cv2.imread(join(root_v, jpg), cv2.IMREAD_GRAYSCALE)
+                if not np.isfinite(flow).all():
+                    raise Exception('non-numeric value detected. probably image reading error.')
                 np.save(out_file + '%03d.npy' % j, flow)
                 j+=1
                 sliced = jpgs[j:j+L]
@@ -65,6 +67,8 @@ for root_u, dirs, files in os.walk(search_dir):
             for k, jpg in enumerate(jpgs):
                 flow[:,:,k*2] = cv2.imread(join(root_u, jpg), cv2.IMREAD_GRAYSCALE)
                 flow[:,:,k*2+1] = cv2.imread(join(root_v, jpg), cv2.IMREAD_GRAYSCALE)
+            if not np.isfinite(flow).all():
+                raise Exception('non-numeric value detected. probably image reading error.')
             np.save(out_file + '.npy', flow)
 
 
